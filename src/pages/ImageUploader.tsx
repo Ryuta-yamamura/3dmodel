@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import FourCameraPhotosTo3DModel from '../utils/FourCameraPhotosTo3DModel';
 import ThreeObjectToBlob from '../utils/ThreeObjectToBlob';
-import * as THREE from 'three';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter';
 
 function App() {
@@ -9,13 +8,13 @@ function App() {
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.files) {
-      return;
-    }
-    const fileList = Array.from(event.target.files);
-    setFiles(fileList);
-  };
+  function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    const files: FileList | null = e.target.files;
+    if (!files) return;
+  
+    const newFiles: File[] = Array.from(files);
+    setFiles((prevFiles) => [...prevFiles, ...newFiles]);
+  }
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
